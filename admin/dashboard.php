@@ -1,4 +1,7 @@
-<?php include "header.php"; ?>
+<?php
+include "header.php";
+include_once "connection.php";
+?>
 <div class="page-header">
   <h3 class="page-title">
     <span class="page-title-icon bg-gradient-primary text-white mr-2">
@@ -15,7 +18,16 @@
         <h4 class="font-weight-normal mb-3">Category
           <i class="mdi mdi-chart-line mdi-24px float-right"></i>
         </h4>
-        <h2 class="mb-5">$ 15,0000</h2>
+        <h2 class="mb-5">
+          <?php
+          $sql = "SELECT count(ID) FROM category";
+          $result = $conn->query($sql);
+          if ($result->num_rows > 0) {
+            $row = $result->fetch_assoc();
+            echo $row['count(ID)'];
+          }
+          ?>
+        </h2>
       </div>
     </div>
   </div>

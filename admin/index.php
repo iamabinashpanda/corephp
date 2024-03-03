@@ -1,3 +1,24 @@
+<?php
+require_once("connection.php");
+if ($_SERVER["REQUEST_METHOD"] == "POST") 
+{
+  $sql = "SELECT * FROM users where username='".$_POST['email']."' and password ='".md5($_POST['password'])."'";
+  $result = $conn->query($sql);
+  if ($result->num_rows > 0)
+  {
+    while($row = $result->fetch_assoc())
+    { 
+      session_start();
+      $_SESSION["ID"] = $row["ID"];
+      $_SESSION["Name"] = $row["Name"];
+      $_SESSION["Email"] = $row["Email"];
+    }
+    header("location: dashboard.php");
+  }
+}
+$conn->close();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -25,25 +46,27 @@
         <div class="row w-100">
           <div class="col-lg-4 mx-auto">
             <div class="auth-form-light bg-dark text-light text-left p-5">
-              <center><h2>Administration</h2></center>
-              <form class="pt-3">
+              <center>
+                <h2>Administration</h2>
+              </center>
+              <form class="pt-3" method="post">
                 <div class="form-group">
-                  <input type="email" class="form-control form-control-lg text-light" id="exampleInputEmail1" placeholder="Username">
+                  <input type="text" class="form-control form-control-lg text-light" name="email" id="email" placeholder="Username" required>
                 </div>
                 <div class="form-group">
-                  <input type="password" class="form-control form-control-lg text-light" id="exampleInputPassword1" placeholder="Password">
+                  <input type="password" class="form-control form-control-lg text-light" name="password" id="password" placeholder="Password" required>
                 </div>
                 <div class="mt-3">
-                  <a class="btn btn-block btn-gradient-info btn-lg font-weight-medium auth-form-btn" href="assets/index.html">LOG IN</a>
+                  <button type="submit" class="btn btn-block btn-gradient-info btn-lg font-weight-medium auth-form-btn" href="index.php">LOG IN</button>
                 </div>
-                <div class="my-2 d-flex justify-content-between align-items-center">
+                <!-- <div class="my-2 d-flex justify-content-between align-items-center">
                   <div class="form-check form-check-info">
                     <label class="form-check-label text-muted ">
                       <input type="checkbox" class="form-check-input">
                       Remember Me
                     </label>
                   </div>
-                </div>
+                </div> -->
               </form>
             </div>
           </div>

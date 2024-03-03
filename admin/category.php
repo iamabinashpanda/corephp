@@ -35,21 +35,60 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>
-                                    1
-                                </td>
-                                <td>
-                                    <img src="assets/images/faces/face1.jpg" class="mr-2" alt="image">
-                                </td>
-                                <td>
-                                    <b>Mobile</b>
-                                </td>
-                                <td>
-                                <a href="#" class="btn btn-gradient-info">Edit</a>
-                                    <a href="#" class="btn btn-gradient-danger">Delete</a>
-                                </td>
-                            </tr>
+                            <?php
+                            include_once "connection.php";
+                            $sql = "SELECT * FROM category";
+                            $result = $conn->query($sql);
+                            if ($result->num_rows > 0) {
+                                $i = 0;
+                                while ($row = $result->fetch_assoc()) {
+                                    $i++;
+                            ?>
+                                    <tr>
+                                        <td>
+                                            <?= $i ?>
+                                        </td>
+                                        <td>
+                                            <img src="<?= 'uploads/' . $row['Filename'] ?>" class="mr-2" alt="<?= $row['Filename'] ?>">
+                                        </td>
+                                        <td>
+                                            <b><?= strtoupper($row['Name']) ?></b>
+                                        </td>
+                                        <td>
+                                            <div class="modal fade" id="<?= $i ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h1 class="modal-title" id="exampleModalLabel"><?= $row['Name'] ?></h1>
+                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <img src="<?= "uploads/".$row['Filename'] ?>" alt="<?= $row['Filename'] ?>" class="mb-2 mw-100 w-100 rounded">
+                                                            <div class="form-group">
+                                                                <label for="description">Description</label>
+                                                                <textarea class="form-control" id="description" name="description" rows="4" disabled><?= $row['Description'] ?></textarea>
+                                                            </div>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                            <a href="editcategory.php?id=<?=base64_encode($row['ID'])?>" class="btn btn-gradient-success text-light">Edit</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- <a href="#" class="btn btn-gradient-info">Edit</a> -->
+                                            <button type="button" class="btn btn-gradient-primary" data-toggle="modal" data-target="<?= "#" . $i ?>">
+                                                View
+                                            </button>
+                                            <a href="<?= 'deletecategory.php?id=' . base64_encode($row['ID']) ?>" class="btn btn-gradient-danger">Delete</a>
+                                        </td>
+                                    </tr>
+                            <?php
+                                }
+                            }
+                            ?>
                         </tbody>
                     </table>
                 </div>
